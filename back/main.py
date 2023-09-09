@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
-
+from fastapi.responses import FileResponse
 app = FastAPI()
 
 
@@ -15,3 +15,7 @@ async def json_file(file: UploadFile):
         file.file.close()
 
     return {"message": f"Successfully uploaded {file.filename}"}
+
+@app.get('/')
+async def show_result():
+    return FileResponse("test.jpg")
