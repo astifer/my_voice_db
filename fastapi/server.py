@@ -1,9 +1,5 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, UploadFile
 from fastapi.responses import FileResponse
-
-
-from cluster.create_csv_labeled_data import labeled_jsons_to_df
-from cluster.w2v import file_2_vectors
 
 import os
 import os.path

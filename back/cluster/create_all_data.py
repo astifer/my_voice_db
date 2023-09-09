@@ -18,7 +18,7 @@ def all_json_to_df(all_path) -> pd.DataFrame:
             with open("all/" + a_file) as f:
                 q_a = json.loads(f.read())
         except:
-            print(a_file)
+            # print(a_file)
             pass
         q = q_a["question"]
 

@@ -37,12 +37,12 @@ def generate_k_means_clusters(embeddings):
         cluster_labels = clusterer.fit_predict(embeddings)
 
         silhouette_avg = silhouette_score(embeddings, cluster_labels)
-        print(
-            "For n_clusters =",
-            n_clusters,
-            "The average silhouette_score is :",
-            silhouette_avg,
-        )
+        # print(
+        #     "For n_clusters =",
+        #     n_clusters,
+        #     "The average silhouette_score is :",
+        #     silhouette_avg,
+        # )
 
         if max_silhouette_score < silhouette_avg:
             max_silhouette_score = silhouette_avg
@@ -85,7 +85,7 @@ def clusters_2_df(
         )
 
     result = pd.DataFrame(texts, columns=["answer", "x", "y"])
-    print(result)
+    # print(result)
     result["labels"] = clusters.labels_
 
     clustered = result[result.labels != -1]

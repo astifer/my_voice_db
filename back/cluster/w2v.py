@@ -42,7 +42,7 @@ def file_2_vectors(file) -> tuple:
     # for sentence in answers:
     #     corpus.append(sentence[0].split())
     model = Word2Vec(answers, vector_size=100, min_count=1)
-    print(answers)
+    # print(answers)
     vectors = []
     for sentence in answers:
         if len(sentence[0]) == 0:

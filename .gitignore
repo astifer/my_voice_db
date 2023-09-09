@@ -2,6 +2,6 @@
 data
 
 back/__pycache__
-cluster/__pycache__
+back/cluster/__pycache__
 back/app/__pycache__
 

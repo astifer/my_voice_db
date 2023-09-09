@@ -3,9 +3,10 @@ from fastapi.responses import FileResponse
 import uvicorn
 
 # from cluster.create_csv_labeled_data import labeled_jsons_to_df
-from cluster.create_all_data import file_2_df
-from cluster.w2v import file_2_vectors
-from cluster.generate_clusters import generate_k_means_clusters, clusters_2_df
+from back.cluster.create_all_data import file_2_df
+from back.cluster.w2v import file_2_vectors
+from back.sentiment.sent_label import json_to_sentiment
+from back.cluster.generate_clusters import generate_k_means_clusters, clusters_2_df
 
 
 app = FastAPI()
@@ -24,12 +25,10 @@ async def upload_json(file: UploadFile = File()):
     vectors, model = file_2_vectors(file_location)
     s_score, kmeans = generate_k_means_clusters(vectors)
     df_text = file_2_df(file_location)
-    clustered = clusters_2_df(
-        vectors,
-        kmeans,
-        model,
-        df_text
-    )
+    clustered = clusters_2_df(vectors, kmeans, model, df_text)
+    sentiment_list = json_to_sentiment(file_location)
+
+    clustered['sentiment'] = sentiment_list
 
     return clustered.to_json()
 
