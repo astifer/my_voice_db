@@ -9,4 +9,5 @@
 # Стек
 
 backend: python - fastAPI
+
 frontend: js -React
