@@ -4,7 +4,7 @@ from os import listdir
 from os.path import isfile, join
 import pandas as pd
 
-all_path = 'all'
+all_path = 'data/train_dataset_Мой голос/all'
 all_files = [f for f in listdir(all_path) if isfile(join(all_path, f))]
 
 data_raw_all = []
@@ -39,3 +39,4 @@ for word in corpus:
   for w in word:
     word_vec.append(model.wv.get_vector(w))
   vectors.append(word_vec)
+  
