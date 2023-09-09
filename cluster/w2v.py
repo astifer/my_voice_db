@@ -1,13 +1,13 @@
 from gensim.models import Word2Vec
 import numpy as np
 
-from create_all_data import all_json_to_df
+from cluster.create_all_data import all_json_to_df
 
 
 def file_2_vectors(file, question, corpus) -> list:
     """
 
-    :params corpus:
+    :params corpus: [['word'], ['another word'] ]
             question:
             file:
     :return list:
