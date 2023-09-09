@@ -2,8 +2,8 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 
 
-# from cluster.create_csv_labeled_data import labeled_jsons_to_df
-# from cluster.w2v import file_2_vectors
+from cluster.create_csv_labeled_data import labeled_jsons_to_df
+from cluster.w2v import file_2_vectors
 
 
 app = FastAPI()
@@ -20,7 +20,7 @@ async def upload_json(file: UploadFile):
     finally:
         file.file.close()
         
-    # l = file_2_vectors(file.filename)
+    l = file_2_vectors(file.filename)
     
     return {"message": f"Successfully uploaded {file.filename}",
             'embs': [0]}

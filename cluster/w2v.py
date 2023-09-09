@@ -2,12 +2,11 @@ from gensim.models import Word2Vec
 import numpy as np
 import json
 
-from create_all_data import all_json_to_df
+from cluster.create_all_data import all_json_to_df
 
 
 def file_2_vectors(file) -> list:
     """
-
     :params file: json-file
     :return embeddings list:
     """

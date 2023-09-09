@@ -6,16 +6,16 @@ services:
     build: ./back
     command: uvicorn app.main:app --root-path /api --proxy-headers --host 0.0.0.0 --port 8000
 
-  frontend:
-    build: ./front
-    ports:
-      - "8080:80"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy-data:/data
-      - caddy-config:/config
-    depends_on:
-      - backend
+  # frontend:
+  #   build: ./front
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - caddy-data:/data
+  #     - caddy-config:/config
+  #   depends_on:
+  #     - backend
 
 volumes:
   caddy-data:

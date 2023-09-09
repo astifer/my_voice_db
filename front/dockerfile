@@ -13,7 +13,10 @@ COPY ./public ./public
 
 RUN npm install
 
-RUN npm run build
+RUN npm run dev
+
+
+# 5173
 
 # Build step #2: build an Caddy container
 FROM caddy:alpine
