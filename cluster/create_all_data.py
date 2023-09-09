@@ -32,7 +32,7 @@ def file_2_df(file):
     with open(file, encoding='utf_8') as f:
         q_a = json.loads(f.read())
         q = q_a["question"]
-        print(q)
+        # print(q)
         for a in q_a["answers"]:
             answers.append([a["answer"], q])
     return pd.DataFrame(answers, columns=['answer', 'question'])
