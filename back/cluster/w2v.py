@@ -5,23 +5,22 @@ import string
 # import nltk
 #
 # nltk.download("punkt")
-# nltk.download("stopwords")
 # nltk.download("wordnet")
 #
-# from nltk.tokenize import word_tokenize
-# from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
 
 
 from gensim.models import Word2Vec
 
 
-# def clean_text(text):
-#     table = text.maketrans(dict.fromkeys(string.punctuation))
-#
-#     words = word_tokenize(text.lower().strip().translate(table))
-#     # words = [word for word in words if word not in stopwords.words('russian')]
-#     lemmed = [WordNetLemmatizer().lemmatize(word) for word in words]
-#     return " ".join(lemmed)
+def clean_text(text):
+    table = text.maketrans(dict.fromkeys(string.punctuation))
+
+    words = word_tokenize(text.lower().strip().translate(table))
+    # words = [word for word in words if word not in stopwords.words('russian')]
+    lemmed = [WordNetLemmatizer().lemmatize(word) for word in words]
+    return " ".join(lemmed)
 
 
 def file_2_vectors(file) -> tuple:
@@ -36,7 +35,7 @@ def file_2_vectors(file) -> tuple:
         q = q_a["question"]
         # print(q)
         for a in q_a["answers"]:
-            answers.append([a["answer"] + " " + q])
+            answers.append([clean_text(a["answer"] + " " + q)])
 
     # corpus = []
     # for sentence in answers:
@@ -58,5 +57,6 @@ def file_2_vectors(file) -> tuple:
     return vectors, model
 
 
-# if __name__ == "__main__":
-# vectors, model = (file_2_vectors("data/1704.json"))
+if __name__ == "__main__":
+    vectors, model = (file_2_vectors("../../data/1704.json"))
+    print(len(vectors))

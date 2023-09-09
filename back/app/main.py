@@ -1,3 +1,5 @@
+import logging
+import pandas as pd
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 import uvicorn
@@ -7,6 +9,7 @@ from back.cluster.create_all_data import file_2_df
 from back.cluster.w2v import file_2_vectors
 from back.sentiment.sent_label import json_to_sentiment
 from back.cluster.generate_clusters import generate_k_means_clusters, clusters_2_df
+from back.sentiment.bad_answers import bad_answers
 
 
 app = FastAPI()
@@ -26,19 +29,31 @@ async def upload_json(file: UploadFile = File()):
     s_score, kmeans = generate_k_means_clusters(vectors)
     df_text = file_2_df(file_location)
     clustered = clusters_2_df(vectors, kmeans, model, df_text)
+    bad_ans = bad_answers(df_text)
+    bad_ans.to_csv("data/bad_answers.csv", index=False)
+    # logging.warning(bad_ans)
     # sentiment_list = json_to_sentiment(file_location)
 
     # clustered['sentiment'] = sentiment_list
-    with open('data/clustered.json','w', encoding='utf8') as f:
+    with open("data/clustered.json", "w", encoding="utf8") as f:
         clustered.to_json(f, force_ascii=False)
 
-    return FileResponse('data/clustered.json')
+    return FileResponse("data/clustered.json")
 
 
 @app.get("/get_img")
 async def show_result():
     return FileResponse("test.jpg")
 
+
+@app.get("/get_errors")
+async def get_errors():
+    bad_ans = pd.read_csv("data/bad_answers.csv")
+
+    with open("data/bad_ans.json", "w", encoding="utf8") as f:
+        bad_ans.to_json(f, force_ascii=False)
+
+    return FileResponse("data/bad_ans.json")
 
 
 if __name__ == "__main__":
