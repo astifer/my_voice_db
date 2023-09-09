@@ -21,7 +21,7 @@ for l_file in labeled_files:
         elif a["sentiment"] == "positives":
             sentiment = 2
         else:
-            sentiment = 0
+            sentiment = 1
 
         if a["count"] > 1:
             for _ in range(int(a["counts"])):
