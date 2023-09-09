@@ -5,24 +5,28 @@ import json
 from create_all_data import all_json_to_df
 
 
-def file_2_vectors(file) -> list:
+from gensim.models import Word2Vec
+
+
+def file_2_vectors(file) -> tuple:
     """
 
     :params file: json-file
-    :return embeddings list:
+    :return embeddings list, Word2Vec model:
     """
     answers = []
     with open(file, encoding='utf_8') as f:
         q_a = json.loads(f.read())
         q = q_a["question"]
+        print(q)
         for a in q_a["answers"]:
-            answers.append([a["answer"], q])
+            answers.append([clean_text(a["answer"]+' '+ q)])
 
-    corpus = []
-    for sentence in answers:
-        corpus.append(sentence[0].split())
-    model = Word2Vec(corpus, vector_size=100, min_count=1)
-
+    # corpus = []
+    # for sentence in answers:
+    #     corpus.append(sentence[0].split())
+    model = Word2Vec(answers, vector_size=100, min_count=1)
+    print(answers)
     vectors = []
     for sentence in answers:
         if len(sentence[0]) == 0:
@@ -35,8 +39,7 @@ def file_2_vectors(file) -> list:
         else:
             word_vec = model.wv[sentence[0]]
         vectors.append(word_vec)
-
-    return vectors
+    return vectors, model
 
 #if __name__ == "__main__":
-    # print(file_2_vectors("data/1704.json"))
+    # vectors, model = (file_2_vectors("data/1704.json"))
