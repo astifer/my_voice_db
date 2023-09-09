@@ -1,15 +1,17 @@
-FROM tiangolo/uvicorn-gunicorn:python3.7
+FROM python:3.9
 
-RUN mkdir /fastapi
+WORKDIR /code
 
-COPY requirements.txt /fastapi
+ENV PYTHONDONTWRITEBYTECODE 1
 
-WORKDIR /fastapi
+ENV PYTHONBUFFERED 1
 
-RUN pip install -r requirements.txt
+COPY ./requirements.txt /code/requirements.txt
 
-COPY . /fastapi
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY ./app /code/app
 
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

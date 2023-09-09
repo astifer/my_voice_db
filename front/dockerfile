@@ -1,16 +1,25 @@
+# Build step #1: build the React front end
+FROM node:lts-alpine as build-step
 
-FROM node:18
+WORKDIR /app
 
-RUN mkdir /streamlit
+ENV PATH /app/node_modules/.bin:$PATH
 
-COPY requirements.txt /streamlit
+COPY package.json  ./
 
-WORKDIR /streamlit
+COPY ./src ./src
 
-RUN pip install -r requirements.txt
+COPY ./public ./public
 
-COPY . /streamlit
+RUN npm install
 
-EXPOSE 8501
+RUN npm run build
 
-CMD 
+# Build step #2: build an Caddy container
+FROM caddy:alpine
+
+EXPOSE 80
+
+EXPOSE 443
+
+COPY --from=build-step /app/build /usr/share/caddy
