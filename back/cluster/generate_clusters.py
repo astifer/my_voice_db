@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 # import hdbscan
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
@@ -28,11 +29,11 @@ def generate_clusters(
 
     return clusters
 
+
 def generate_k_means_clusters(embeddings):
     best_num_clusters = 2
     max_silhouette_score = 0
     for n_clusters in range(2, len(embeddings) // 2):
-
         clusterer = KMeans(n_clusters=n_clusters, n_init="auto", random_state=42)
         cluster_labels = clusterer.fit_predict(embeddings)
 
@@ -48,9 +49,10 @@ def generate_k_means_clusters(embeddings):
             max_silhouette_score = silhouette_avg
             best_num_clusters = n_clusters
 
-    kmeans = KMeans(n_clusters=best_num_clusters, n_init='auto', random_state=42)
+    kmeans = KMeans(n_clusters=best_num_clusters, n_init="auto", random_state=42)
     kmeans.fit(embeddings)
     return max_silhouette_score, kmeans
+
 
 def clusters_2_df(
     embeddings, clusters, w2v_model, df_texts, n_neighbors=15, min_dist=0.1
@@ -73,24 +75,32 @@ def clusters_2_df(
         random_state=42,
     ).fit_transform(embeddings)
 
+    centroids = clusters.cluster_centers_
+    centroid_labels = [centroids[i] for i in clusters.labels_]
+
     texts = []
     for i in range(len(embeddings)):
         text = str(w2v_model.wv.most_similar(positive=embeddings[i], topn=1)[0][0])
+        label_text = str(
+            w2v_model.wv.most_similar(positive=centroid_labels[i], topn=1)[0][0]
+        )
         texts.append(
             [
                 text[: len(text) - len(df_texts["question"][0])],
-                umap_data[i][0],
-                umap_data[i][1],
+                label_text[: len(label_text) - len(df_texts["question"][0])],
+                # umap_data[i][0],
+                # umap_data[i][1],
             ]
         )
 
-    result = pd.DataFrame(texts, columns=["answer", "x", "y"])
+    result = pd.DataFrame(texts, columns=["answer", "text_labels"])
     # print(result)
     result["labels"] = clusters.labels_
 
     clustered = result[result.labels != -1]
 
     return clustered
+
 
 def score_clusters(clusters, prob_threshold=0.05):
     """
