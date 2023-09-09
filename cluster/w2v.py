@@ -1,4 +1,5 @@
 from gensim.models import Word2Vec
+import numpy as np
 import json
 from os import listdir
 from os.path import isfile, join
@@ -36,11 +37,10 @@ for sentence in data_all[data_all['question'] == 'Что является гла
 """
 
 model = Word2Vec(corpus, vector_size=100, min_count=1)
-Vectors = []
+vectors = []
 for word in corpus:
   # if word in model.wv.key_to_index.keys():
   word_vec = []
   for w in word:
     word_vec.append(model.wv.get_vector(w))
-  Vectors.append(word_vec)
-  
+  vectors.append(word_vec)
