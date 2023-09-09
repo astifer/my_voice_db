@@ -3,8 +3,8 @@ from fastapi.responses import FileResponse
 app = FastAPI()
 
 
-@app.post('/')
-async def json_file(file: UploadFile):
+@app.post('/upload')
+async def upload_json(file: UploadFile):
     try:
         contents = file.file.read()
         with open(file.filename, 'wb') as f:
@@ -16,6 +16,7 @@ async def json_file(file: UploadFile):
 
     return {"message": f"Successfully uploaded {file.filename}"}
 
-@app.get('/')
+@app.get('/get_img')
 async def show_result():
     return FileResponse("test.jpg")
+

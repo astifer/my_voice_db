@@ -2,3 +2,4 @@
 *.json
 data
 
+back/__pycache__
