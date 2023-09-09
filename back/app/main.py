@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 import uvicorn
+import json
 
 # from cluster.create_csv_labeled_data import labeled_jsons_to_df
 from back.cluster.create_all_data import file_2_df
@@ -29,6 +30,9 @@ async def upload_json(file: UploadFile = File()):
     sentiment_list = json_to_sentiment(file_location)
 
     clustered['sentiment'] = sentiment_list
+    # with open('data/clustered.json', 'w', encoding='utf-8') as file:
+    #     clustered.to_json(file, force_ascii=False)
+    # return open("data/clustered.json")
 
     return clustered.to_json()
 
