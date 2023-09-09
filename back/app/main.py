@@ -26,29 +26,19 @@ async def upload_json(file: UploadFile = File()):
     s_score, kmeans = generate_k_means_clusters(vectors)
     df_text = file_2_df(file_location)
     clustered = clusters_2_df(vectors, kmeans, model, df_text)
-    sentiment_list = json_to_sentiment(file_location)
+    # sentiment_list = json_to_sentiment(file_location)
 
-    clustered['sentiment'] = sentiment_list
+    # clustered['sentiment'] = sentiment_list
+    with open('data/clustered.json','w', encoding='utf8') as f:
+        clustered.to_json(f, force_ascii=False)
 
-    return clustered.to_json()
+    return FileResponse('data/clustered.json')
 
 
 @app.get("/get_img")
 async def show_result():
     return FileResponse("test.jpg")
 
-
-@app.get("/vectors")
-async def vectors():
-    l = [0] * 10
-
-    try:
-        l = l[:5]
-    except Exception as e:
-        return {"status": "exc", "Exception": str(e)}
-    finally:
-        if l is not None:
-            return {"list": l}
 
 
 if __name__ == "__main__":
