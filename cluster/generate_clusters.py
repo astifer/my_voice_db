@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 # import hdbscan
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
@@ -52,6 +52,45 @@ def generate_k_means_clusters(embeddings):
     kmeans.fit(embeddings)
     return max_silhouette_score, kmeans
 
+def clusters_2_df(
+    embeddings, clusters, w2v_model, df_texts, n_neighbors=15, min_dist=0.1
+) -> pd.DataFrame:
+    """
+
+    Arguments:
+        embeddings: embeddings to use
+        clusters: HDBSCAN object of clusters
+        n_neighbors: float, UMAP hyperparameter n_neighbors
+        min_dist: float, UMAP hyperparameter min_dist for effective
+                  minimum distance between embedded points
+
+    """
+    umap_data = umap.UMAP(
+        n_neighbors=n_neighbors,
+        n_components=2,
+        min_dist=min_dist,
+        # metric='cosine',
+        random_state=42,
+    ).fit_transform(embeddings)
+
+    texts = []
+    for i in range(len(embeddings)):
+        text = str(w2v_model.wv.most_similar(positive=embeddings[i], topn=1)[0][0])
+        texts.append(
+            [
+                text[: len(text) - len(df_texts["question"][0])],
+                umap_data[i][0],
+                umap_data[i][1],
+            ]
+        )
+
+    result = pd.DataFrame(texts, columns=["answer", "x", "y"])
+    print(result)
+    result["labels"] = clusters.labels_
+
+    clustered = result[result.labels != -1]
+
+    return clustered
 
 def score_clusters(clusters, prob_threshold=0.05):
     """

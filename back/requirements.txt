@@ -1,6 +1,0 @@
-fastapi
-numpy
-pandas
-uvicorn
-cluster
-gensim
