@@ -1,12 +1,11 @@
 import './App.css'
-
+import Header from './components/Header'
+import Sidebar from './components/Sidebar'
 function App() {
-
   return (
     <>
-      <div className='w-[60px] h-10 bg-black'>
-
-      </div>
+      <Header></Header>
+      <Sidebar></Sidebar>
     </>
   )
 }
