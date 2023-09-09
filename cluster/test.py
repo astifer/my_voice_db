@@ -1,6 +1,6 @@
 import pandas as pd
 
-import umap.umap_ as umap
+import umap.umap_ as umap # pip install umap-learn
 
 from w2v import file_2_vectors
 from generate_clusters import generate_clusters, score_clusters
