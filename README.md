@@ -5,3 +5,4 @@
 Задача кластеризации вопросов
 
 ![test](https://github.com/cradmlozzer/my_voice_db/assets/108126763/8bf7d462-a8bd-4d34-a64c-0c8d500e9d67)
+

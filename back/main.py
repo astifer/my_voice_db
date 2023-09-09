@@ -1,5 +1,9 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
+
+from cluster.w2v import Vectors
+
+
 app = FastAPI()
 
 
@@ -20,3 +24,14 @@ async def upload_json(file: UploadFile):
 async def show_result():
     return FileResponse("test.jpg")
 
+@app.get('/vectors')
+async def vectors():
+    l = list()
+    try:
+        l = Vectors[:5]
+    except Exception as e:
+        return {'status': 'exc',
+                'Exception': str(e)}
+    finally:
+        if l is not None:
+            return {'list': l}

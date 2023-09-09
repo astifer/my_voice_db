@@ -3,18 +3,22 @@ import json
 from os import listdir
 from os.path import isfile, join
 import pandas as pd
+import logging
 
-all_path = 'data/train_dataset_Мой голос/all'
+all_path = 'data/train_dataset_Мой голос/all/'
 all_files = [f for f in listdir(all_path) if isfile(join(all_path, f))]
 
 data_raw_all = []
+c=0
 for a_file in all_files:
     try:
-        with open("all/" + a_file) as f:
+        with open(all_path + a_file) as f:
             q_a = json.loads(f.read())
     except:
-        print(a_file)
-        pass
+        logging.warning(a_file, c)
+        c+=1
+        continue
+      
     q = q_a['question']
 
     for a in q_a['answers']:
@@ -32,11 +36,11 @@ for sentence in data_all[data_all['question'] == 'Что является гла
 """
 
 model = Word2Vec(corpus, vector_size=100, min_count=1)
-vectors = []
+Vectors = []
 for word in corpus:
   # if word in model.wv.key_to_index.keys():
   word_vec = []
   for w in word:
     word_vec.append(model.wv.get_vector(w))
-  vectors.append(word_vec)
+  Vectors.append(word_vec)
   
