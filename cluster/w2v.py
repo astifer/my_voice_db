@@ -44,3 +44,8 @@ for word in corpus:
   for w in word:
     word_vec.append(model.wv.get_vector(w))
   vectors.append(word_vec)
+  
+  
+def file_2_vectors(file)->list:
+    
+    return []
