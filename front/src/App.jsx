@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
-import { KMeans } from 'node-kmeans';
+import React, { useState, useEffect } from 'react';
+import KMeans from 'kmeans-js';
 
 const App = () => {
   const [file, setFile] = useState(null);
-  const [metrics, setMetrics] = useState(null);
+  const [data, setData] = useState([]);
   const [clusteredData, setClusteredData] = useState([]);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const numClusters = 3;
+      const inputData = Object.keys(data[0].answer).map((key) => [data[0].answer[key], data[0].labels[key]]);
+      const kmeans = new KMeans();
+      const clusters = kmeans.cluster(inputData, { K: numClusters });
+      const clusteredData = Object.keys(data[0].answer).map((key, index) => ({
+        answer: data[0].answer[key],
+        labels: data[0].labels[key],
+        cluster: clusters[index].centroidIndex,
+      }));
+      setClusteredData(clusteredData);
+    }
+  }, [data]);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -22,19 +37,12 @@ const App = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setMetrics(data);
-        console.log('File uploaded successfully');
-
-        // Выполняем кластеризацию данных
-        const numClusters = 3;
-        const inputData = data.map((item) => [item.answer, item.labels]);
-        const kmeans = new KMeans({ k: numClusters });
-        const clusters = data.cluster(inputData);
-        const clusteredData = data.map((item, index) => ({
-          ...item,
-          cluster: clusters[index].clusterIndex,
-        }));
-        setClusteredData(clusteredData);
+        if (Array.isArray(data) && data.length > 0 && data[0].answer && data[0].labels) {
+          setData(data);
+          console.log('File uploaded successfully');
+        } else {
+          console.error('Invalid data structure');
+        }
       } else {
         console.error('File upload failed');
       }
@@ -54,7 +62,7 @@ const App = () => {
           {clusteredData.map((item, index) => (
             <div key={index}>
               <p>Answer: {item.answer}</p>
-              <p>Label: {item.labels}</p>
+              <p>Labels: {item.labels}</p>
               <p>Cluster: {item.cluster}</p>
             </div>
           ))}
