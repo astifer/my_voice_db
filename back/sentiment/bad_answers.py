@@ -81,7 +81,7 @@ def bad_answers(df) -> pd.DataFrame:
     X_test = df.drop(['answer','question'], axis=1)
     X_test['bad_words'] = df['bad_words']
 
-    print(X_test)
+    # print(X_test)
     y_predict = model.predict(X_test)
 
     X_test["temp"] = np.ones(len(X_test))

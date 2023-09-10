@@ -3,6 +3,7 @@ import pandas as pd
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 import uvicorn
+from starlette.middleware.cors import CORSMiddleware
 
 # from cluster.create_csv_labeled_data import labeled_jsons_to_df
 from back.cluster.create_all_data import file_2_df
@@ -13,6 +14,15 @@ from back.sentiment.bad_answers import bad_answers
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 @app.post("/upload")
