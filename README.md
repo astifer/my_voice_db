@@ -15,7 +15,7 @@
 
 На вход поступает файл json и парсится. Для каждого ответа моделью Word2Vec(gensim) создается вектор ембедингов. Далее алгоритмом K-means с помощью Silhouette Method происходит кластеризация и создается итоговый файл. В нем каждому ответу сопоставляется текстовое описание класса, к которому принадлежит текст
 
-![image-4](https://github.com/cradmlozzer/my_voice_db/assets/108126763/72bdeadf-8f2f-49d1-9c56-74ad0cf28fc2)
+![cluster (1)](https://github.com/cradmlozzer/my_voice_db/assets/108126763/5f5fc6fc-e87d-4844-92ba-bb64df35573c)
 
 ## Фильтр подозрительных слов
 
