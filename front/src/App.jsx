@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { KMeans } from 'node-kmeans';
 
-function App() {
-  
-  const uploadFile = async(file) =>{
-    
-    await fetch('https://dafe-212-46-18-171.ngrok-free.app/upload', {
-      // content-type header should not be specified!
-      method: 'POST',
-      Headers: {'Content-Type': 'multipart/form-data',
-               'accept': 'application/json'
-               },
-      body: {file},
-    })
-      .then(response => response.json())
-      .then(success => {
-        console.log(success)
-      })
-      .catch(error => console.log(error)
-    );
-  }
-  return(
-    <>
-      <form>
-          <input type="file" id='myinput' onSubmit={uploadFile}></input>
-        <button type="submit">Convert</button>
-      </form>
-    </>
-  )
-}
+const App = () => {
+  const [file, setFile] = useState(null);
+  const [metrics, setMetrics] = useState(null);
+  const [clusteredData, setClusteredData] = useState([]);
 
-export default App
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('https://dafe-212-46-18-171.ngrok-free.app/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMetrics(data);
+        console.log('File uploaded successfully');
+
+        // Выполняем кластеризацию данных
+        const numClusters = 3;
+        const inputData = data.map((item) => [item.answer, item.labels]);
+        const kmeans = new KMeans({ k: numClusters });
+        const clusters = data.cluster(inputData);
+        const clusteredData = data.map((item, index) => ({
+          ...item,
+          cluster: clusters[index].clusterIndex,
+        }));
+        setClusteredData(clusteredData);
+      } else {
+        console.error('File upload failed');
+      }
+    } catch (error) {
+      console.error('Error occurred while uploading file:', error);
+    }
+  };
+
+  return (
+    <div>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload</button>
+
+      {clusteredData.length > 0 && (
+        <div>
+          <h2>Clustering Results</h2>
+          {clusteredData.map((item, index) => (
+            <div key={index}>
+              <p>Answer: {item.answer}</p>
+              <p>Label: {item.labels}</p>
+              <p>Cluster: {item.cluster}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
