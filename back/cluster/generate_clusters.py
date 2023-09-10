@@ -96,6 +96,7 @@ def clusters_2_df(
     result = pd.DataFrame(texts, columns=["answer", "text_labels"])
     # print(result)
     result["labels"] = clusters.labels_
+    result["question"] = df_texts["question"]
 
     clustered = result[result.labels != -1]
 
