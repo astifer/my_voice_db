@@ -2,7 +2,7 @@
 
 Трек от Росатома для платформы мой голос
 
-![Росатом svg](https://github.com/cradmlozzer/my_voice_db/assets/108126763/3ba11764-9d88-4842-93a6-5e44c4baff71)
+![rosatom](https://github.com/cradmlozzer/my_voice_db/assets/108126763/d762933e-c5a2-4ce8-893a-a9f318cb5b67)
 
 Задача кластеризации вопросов и представление их в визуально понятном виде
 
